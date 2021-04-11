@@ -32,6 +32,12 @@ public class AppTest {
             "3,e,f"
             ;
 
+    private static final String MOCK_VARIOUS = "" +
+            "id,col2,col3\n" +
+            "2,x,d\n" +
+            "3,e,f"
+            ;
+
     @Test
     public void givenMock_whenChanged_findsDifference() {
         // given files mocks
@@ -68,6 +74,19 @@ public class AppTest {
         // get results object to summarize differences
         assertEquals(result.getChanged().size(), 0);
         assertEquals(result.getAdded().size(), 0);
+        assertEquals(result.getRemoved().size(), 1);
+    }
+
+    @Test
+    public void givenMock_whenVarious_findsDifference() {
+        // given files mocks
+
+        // when compare
+        Result result = compare(MOCK_BASELINE, MOCK_VARIOUS);
+
+        // get results object to summarize differences
+        assertEquals(result.getChanged().size(), 1);
+        assertEquals(result.getAdded().size(), 1);
         assertEquals(result.getRemoved().size(), 1);
     }
 
