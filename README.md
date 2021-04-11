@@ -1,9 +1,10 @@
 # java-diff - a java difference utility
 
-`java-diff` is a Java implementation for comparison source and target data.
+`java-diff` is a Java micro-library for comparing source and target data.
 
-The comparison logic lies in `Engine.java`, with a simple memory/CSV input,
-but could be expanded to other iterable inputs.
+The comparison logic resides within `Engine.java` using a simple memory/CSV input.
+
+Copy the library and expand to other iterable inputs as desired.
 
 ## Simple Demo
 
