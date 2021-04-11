@@ -54,10 +54,11 @@ public class Engine {
             }
 
             //
-            // target record not found
+            // target record not found: added (present in source but not in target)
             //
+
             if (!found) {
-                res.addRemoved(sourceRecord);
+                res.addAdded(sourceRecord);
             }
 
             //
@@ -88,17 +89,6 @@ public class Engine {
                     res.addChanged(changedRecord);
                 }
             }
-
-            // other cases? - added
-
-            //
-            // search for added instances (present in source but not in target)
-            //
-
-
-
-
-            // other cases? - removed
 
             //
             // search for removed records (present in target but not in source)
