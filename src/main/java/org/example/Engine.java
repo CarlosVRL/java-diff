@@ -59,7 +59,7 @@ public class Engine {
             //
 
             if (!found) {
-                res.addAdded(sourceRecord);
+                res.addRemoved(sourceRecord);
             }
 
             //
@@ -124,7 +124,7 @@ public class Engine {
                 }
             }
             if (!found) {
-                res.addRemoved(targetRecord);
+                res.addAdded(targetRecord);
             }
         }
 
