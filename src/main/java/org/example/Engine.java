@@ -65,17 +65,43 @@ public class Engine {
             //
 
             if (found) {
-                // todo: different? Engine.compare(sourceRecord, targetRecord)
-                // for column in one/record
-
-                // compare to same index in two/record
-
-                // any differences? save
+                Record changedRecord = Record.of(sourceRecords.toArray(new String[0]));
+                List<String> sourceRecordContent = sourceRecord.getRow();
+                List<String> targetRecordContent = targetRecord.getRow();
+                boolean anyDifferent = false;
+                for (int ii = 0; ii < sourceRecordContent.size(); ii++) {
+                    String sourceRecordVal = sourceRecordContent.get(ii);
+                    String targetRecordVal = targetRecordContent.get(ii);
+                    boolean valIsId = (ii == 0);
+                    if (valIsId) {
+                        changedRecord.setContentAt(sourceRecordVal, ii);
+                    }
+                    boolean recordsAreDifferent = (!sourceRecordVal.equals(targetRecordVal));
+                    if (recordsAreDifferent) {
+                        anyDifferent = true;
+                        changedRecord.setContentAt(targetRecordVal, ii);
+                    } else if (!valIsId) {
+                        changedRecord.setContentAt("", ii);
+                    }
+                }
+                if (anyDifferent) {
+                    res.addChanged(changedRecord);
+                }
             }
 
             // other cases? - added
+
             //
-            // search for added instances
+            // search for added instances (present in source but not in target)
+            //
+
+
+
+
+            // other cases? - removed
+
+            //
+            // search for removed records (present in target but not in source)
             //
 
             // for targetRecord
@@ -91,13 +117,19 @@ public class Engine {
         // summarize results
         //
         System.out.println("removed : " + res.getRemoved().size());
-        res.getRemoved().forEach(Result::printId);
+        Result.printHeader(res.header);
+        res.getRemoved().forEach(Result::printRow);
+        System.out.println("");
 
         System.out.println("changed : " + res.getChanged().size());
-        res.getChanged().forEach(Result::printId);
+        Result.printHeader(res.header);
+        res.getChanged().forEach(Result::printRow);
+        System.out.println("");
 
         System.out.println("added : " + res.getAdded().size());
-        res.getAdded().forEach(Result::printId);
+        Result.printHeader(res.header);
+        res.getAdded().forEach(Result::printRow);
+        System.out.println("");
 
         return res;
     }
