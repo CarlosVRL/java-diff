@@ -26,7 +26,8 @@ public class Engine {
             //
             Record sourceRecord = Record.of(sourceRecords.get(i).split(","));
 
-            if (i == 0) {
+            boolean recordIsHeader = (i == 0);
+            if (recordIsHeader) {
                 //
                 // sniff header
                 //
@@ -89,36 +90,61 @@ public class Engine {
                     res.addChanged(changedRecord);
                 }
             }
+        }
+
+        //
+        // search for removed records (present in target but not in source)
+        //
+
+        for (int i = 0; i < targetRecords.size(); i++) {
+            //
+            // compare source records to target
+            //
+            Record targetRecord = Record.of(targetRecords.get(i).split(","));
+
+            boolean recordIsHeader = (i == 0);
+            if (recordIsHeader) {
+                continue;
+            }
 
             //
-            // search for removed records (present in target but not in source)
+            // search for component in target list
             //
-
-            // for targetRecord
-
-                // get targetId
-
-                // search for targetId in sourceRecords
-
-                // found ? void : added;
+            String targetId = targetRecord.getId();
+            Record sourceRecord = null;
+            boolean found = false;
+            for (int j = 1; j < sourceRecords.size(); j++) {
+                Record checkRecord = Record.of(sourceRecords.get(j).split(","));
+                String sourceId = checkRecord.getId();
+                if (targetId.equals(sourceId)) {
+                    //
+                    // source record found
+                    //
+                    found = true;
+                }
+            }
+            if (!found) {
+                res.addRemoved(targetRecord);
+            }
         }
 
         //
         // summarize results
         //
-        System.out.println("removed : " + res.getRemoved().size());
-        Result.printHeader(res.header);
-        res.getRemoved().forEach(Result::printRow);
-        System.out.println("");
 
         System.out.println("changed : " + res.getChanged().size());
-        Result.printHeader(res.header);
+        if (res.getChanged().size() > 0) Result.printHeader(res.header);
         res.getChanged().forEach(Result::printRow);
         System.out.println("");
 
         System.out.println("added : " + res.getAdded().size());
-        Result.printHeader(res.header);
+        if (res.getAdded().size() > 0) Result.printHeader(res.header);
         res.getAdded().forEach(Result::printRow);
+        System.out.println("");
+
+        System.out.println("removed : " + res.getRemoved().size());
+        if (res.getRemoved().size() > 0) Result.printHeader(res.header);
+        res.getRemoved().forEach(Result::printRow);
         System.out.println("");
 
         return res;
